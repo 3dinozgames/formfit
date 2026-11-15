@@ -117,6 +117,7 @@
   <div class="note">📷 Cihazı sabit bir yere koyup 2–3 adım geri çekil. <b>Başından ayak bileklerine kadar</b> tüm vücudun kadrajda olsun, ortam iyi aydınlatılmış olsun.</div>
   <div class="sticky">
    <button class="btn" id="startBtn" disabled>▶️ Programa başla</button>
+   <button class="btn sec" id="camRetry2" style="display:none">📷 Kamerayı aç</button>
    <div class="status" id="status2"></div>
   </div>
  </div>
@@ -458,12 +459,20 @@ function openProgram(p){
 })();
 
 // ---------- model + camera ----------
+// in-app browsers (Instagram, Claude app, etc.) often never show the camera prompt
+const IN_APP = /FBAN|FBAV|Instagram|Line\/|Snapchat|Twitter|TikTok|; wv\)|GSA\//i.test(navigator.userAgent) ||
+  (/iPhone|iPad/.test(navigator.userAgent) && !/Safari\//.test(navigator.userAgent));
+const OPEN_IN_BROWSER = 'Linki Safari\'de (Android\'de Chrome\'da) aç: sağ alttaki/üstteki menüden "Tarayıcıda aç"ı seç.';
+let camPending=false, camAsked=false, camMsg='';
 function refreshReady(){
-  $('startBtn').disabled = !(ready && camReady);
-  if (ready && camReady) setStatus('Hazır ✅');
-  else if (camReady) setStatus('Kamera açık ✅ Model yükleniyor…');
-  else if (ready) setStatus('Kamera izni bekleniyor…');
+  // the start button works as soon as the model is ready; tapping it asks for the camera if needed
+  $('startBtn').disabled = !ready;
+  $('startBtn').textContent = camReady ? '▶️ Programa başla' : '📷 Kamerayı aç ve başla';
+  if (camReady){ setStatus(ready ? 'Hazır ✅' : 'Kamera açık ✅ Model yükleniyor…'); return; }
+  if (camMsg){ setStatus(camMsg + (ready ? '' : ' (Model yükleniyor…)')); return; }
+  setStatus(ready ? 'Hazır. Başlayınca kamera izni istenecek.' : 'Model yükleniyor…');
 }
+function showCamButton(){ $('camRetry').style.display='flex'; $('camRetry2').style.display='flex'; }
 async function initModel(){
   try{
     const RENAMED = {'pose_solution_packed_assets.data':'pose_assets_data.wasm','pose_web.binarypb':'pose_graph_pb.wasm','pose_landmark_lite.tflite':'pose_lite_tflite.wasm'};
@@ -475,23 +484,31 @@ async function initModel(){
   }catch(e){ console.error(e); setStatus('Model yüklenemedi: '+(e&&e.message||e)); }
 }
 async function requestCamera(){
-  $('camRetry').style.display='none';
-  setStatus('Kamera izni isteniyor… (çıkan pencerede "İzin Ver"e bas)');
+  camAsked=true;
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    camMsg='Bu tarayıcı kameraya erişemiyor. '+OPEN_IN_BROWSER; showCamButton(); refreshReady(); return;
+  }
+  if (camPending) return;           // a request is already open
+  camPending=true; $('camRetry').style.display='none'; $('camRetry2').style.display='none';
+  camMsg='Kamera izni isteniyor… (çıkan pencerede "İzin Ver"e bas)'; refreshReady();
+  // if no prompt appears within a few seconds, offer a button (a tap lets the browser show the prompt)
+  const slow=setTimeout(()=>{ if (camPending){
+    camMsg='İzin penceresi çıkmadı mı? "Kamerayı aç" butonuna bas.'+(IN_APP?' Olmazsa: '+OPEN_IN_BROWSER:'');
+    showCamButton(); refreshReady(); camPending=false; } }, 3500);
   try{
-    stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user', width:{ideal:1280}, height:{ideal:720}}, audio:false});
-    src.srcObject=stream; await src.play().catch(()=>{});
-    camReady=true; refreshReady();
+    const s_ = await navigator.mediaDevices.getUserMedia({video:{facingMode:'user', width:{ideal:1280}, height:{ideal:720}}, audio:false});
+    clearTimeout(slow); camPending=false;
+    if (stream && stream!==s_) stream.getTracks().forEach(t=>t.stop());
+    stream=s_; src.srcObject=stream; await src.play().catch(()=>{});
+    camReady=true; camMsg=''; $('camRetry').style.display='none'; $('camRetry2').style.display='none'; refreshReady();
   }catch(e){
-    camReady=false;
+    clearTimeout(slow); camPending=false; camReady=false;
     const denied = e && (e.name==='NotAllowedError' || e.name==='SecurityError');
-    setStatus(denied ? 'Kamera izni verilmedi. Adres çubuğundaki kamera simgesinden izin ver ya da aşağıdaki butona bas.'
+    camMsg=(denied ? 'Kamera izni verilmedi. iPhone: Ayarlar › Safari › Kamera › "İzin Ver". Sonra sayfayı yenile.'+(IN_APP?' '+OPEN_IN_BROWSER:'')
                      : 'Kamera açılamadı ('+(e&&e.name||'hata')+'). Başka bir uygulama kamerayı kullanıyor olabilir.');
-    $('camRetry').style.display='flex';
+    showCamButton(); refreshReady();
   }
 }
-
-// ---------- session ----------
-function clock(){ return performance.now()/1000; }
 async function startProgram(){
   if (!ready || !prog) return;
   if (!camReady || !stream || !stream.active){ await requestCamera(); if (!camReady) return; }
@@ -691,6 +708,7 @@ function render(){
 // ---------- buttons ----------
 $('startBtn').onclick=startProgram;
 $('camRetry').onclick=requestCamera;
+$('camRetry2').onclick=requestCamera;
 $('backBtn').onclick=()=>show('home');
 $('skipBtn').onclick=()=>{ if (!running) return; if (phase==='active'||phase==='intro') showResult(false); else finishStep(); };
 $('close').onclick=endSession;
