@@ -102,7 +102,7 @@
   <p class="sub">Bir program seç. Kamera seni görür, her hareketten önce 3 saniyelik gösterim yapılır, sonra hareketi doğru yapıp yapmadığın kontrol edilip puanlanır.</p>
   <div class="list" id="progList"></div>
   <div class="status" id="status">Kamera izni isteniyor…</div>
-  <button class="btn sec" id="camRetry" style="display:none">📷 Kamera iznini tekrar iste</button>
+  <button class="btn" id="camRetry" style="display:none">📷 Kamerayı aç</button>
  </div>
 </section>
 
@@ -159,6 +159,8 @@
 <script>
 (() => {
 'use strict';
+window.addEventListener('error', e=>{ const st=document.getElementById('status'), st2=document.getElementById('status2'); const m='⚠ Hata: '+(e.message||e); if(st) st.textContent=m; if(st2) st2.textContent=m; });
+window.addEventListener('unhandledrejection', e=>{ const st2=document.getElementById('status2'); if(st2) st2.textContent='⚠ Hata: '+(e.reason&&e.reason.message||e.reason); });
 // ---------- landmark indices (BlazePose) ----------
 const NOSE=0, LS=11, RS=12, LE=13, RE=14, LW=15, RW=16, LH=23, RH=24, LK=25, RK=26, LA=27, RA=28;
 
@@ -483,12 +485,13 @@ async function initModel(){
     ready=true; refreshReady();
   }catch(e){ console.error(e); setStatus('Model yüklenemedi: '+(e&&e.message||e)); }
 }
-async function requestCamera(){
+async function requestCamera(fromTap){
+  if (fromTap && typeof fromTap==='object') fromTap=true;   // called as a click handler
   camAsked=true;
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
     camMsg='Bu tarayıcı kameraya erişemiyor. '+OPEN_IN_BROWSER; showCamButton(); refreshReady(); return;
   }
-  if (camPending) return;           // a request is already open
+  if (camPending && !fromTap) return;   // a request is already open
   camPending=true; $('camRetry').style.display='none'; $('camRetry2').style.display='none';
   camMsg='Kamera izni isteniyor… (çıkan pencerede "İzin Ver"e bas)'; refreshReady();
   // if no prompt appears within a few seconds, offer a button (a tap lets the browser show the prompt)
@@ -501,6 +504,7 @@ async function requestCamera(){
     if (stream && stream!==s_) stream.getTracks().forEach(t=>t.stop());
     stream=s_; src.srcObject=stream; await src.play().catch(()=>{});
     camReady=true; camMsg=''; $('camRetry').style.display='none'; $('camRetry2').style.display='none'; refreshReady();
+    if (startAfterCam && $('detail').classList.contains('on') && !running){ startAfterCam=false; startProgram(); }
   }catch(e){
     clearTimeout(slow); camPending=false; camReady=false;
     const denied = e && (e.name==='NotAllowedError' || e.name==='SecurityError');
@@ -509,9 +513,18 @@ async function requestCamera(){
     showCamButton(); refreshReady();
   }
 }
+// ---------- session ----------
+function clock(){ return performance.now()/1000; }
+let startAfterCam=false;
 async function startProgram(){
-  if (!ready || !prog) return;
-  if (!camReady || !stream || !stream.active){ await requestCamera(); if (!camReady) return; }
+  if (!prog) return;
+  if (!ready){ setStatus('Model hâlâ yükleniyor, birkaç saniye bekle…'); return; }
+  if (!camReady || !stream || !stream.active){
+    startAfterCam=true; $('startBtn').textContent='📷 Kamera açılıyor…';
+    await requestCamera(true);
+    if (!camReady){ refreshReady(); return; }
+  }
+  startAfterCam=false;
   await src.play().catch(()=>{});
   plan=buildPlan(prog); score=0; log=[]; startedAt=clock();
   $('scoreVal').textContent='0';
@@ -707,8 +720,8 @@ function render(){
 
 // ---------- buttons ----------
 $('startBtn').onclick=startProgram;
-$('camRetry').onclick=requestCamera;
-$('camRetry2').onclick=requestCamera;
+$('camRetry').onclick=()=>requestCamera(true);
+$('camRetry2').onclick=()=>{ startAfterCam=true; requestCamera(true); };
 $('backBtn').onclick=()=>show('home');
 $('skipBtn').onclick=()=>{ if (!running) return; if (phase==='active'||phase==='intro') showResult(false); else finishStep(); };
 $('close').onclick=endSession;
@@ -716,7 +729,13 @@ $('againBtn').onclick=startProgram;
 $('homeBtn').onclick=()=>show('home');
 
 
-requestCamera();
+(async()=>{
+  let state='prompt';
+  try{ if (navigator.permissions&&navigator.permissions.query) state=(await navigator.permissions.query({name:'camera'})).state; }catch(e){}
+  if (state==='granted') requestCamera();
+  else if (IN_APP){ camMsg='Kamerayı kullanmak için '+OPEN_IN_BROWSER; showCamButton(); refreshReady(); }
+  else { requestCamera(); }
+})();
 initModel();
 })();
 </script>
