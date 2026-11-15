@@ -43,33 +43,31 @@
   /* stage */
   #stage{background:#000}
   #view{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
-  #score{position:absolute;top:calc(14px + env(safe-area-inset-top));left:14px;width:74px;height:74px;border-radius:50%;background:var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;box-shadow:0 4px 18px rgba(0,0,0,.4);border:2px solid rgba(255,255,255,.85);z-index:7}
-  #score small{font-size:11px;font-weight:600;opacity:.9}
-  #score span{font-size:24px;line-height:1}
-  #topr{position:absolute;top:calc(16px + env(safe-area-inset-top));max-width:40vw;right:14px;display:flex;flex-direction:column;align-items:flex-end;gap:8px;z-index:7}
-  #stepInfo{background:rgba(0,0,0,.55);padding:6px 10px;border-radius:10px;font-size:12px;font-weight:700;text-align:right}
-  #progWrap{width:150px;height:6px;border-radius:4px;background:rgba(255,255,255,.25);overflow:hidden}
-  #progFill{height:100%;width:0;background:var(--accent);transition:width .3s}
   .pill{background:rgba(0,0,0,.55);border:0;color:#fff;border-radius:20px;padding:8px 12px;font-size:14px;cursor:pointer}
-  #mini{position:absolute;top:calc(100px + env(safe-area-inset-top));left:14px;width:74px;height:100px;border-radius:12px;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.25)}
-  #bar{position:absolute;left:0;right:0;bottom:calc(70px + env(safe-area-inset-bottom));background:var(--accent);padding:12px 16px;text-align:center;font-size:24px;font-weight:700;transition:background .2s}
-  #bar.ok{background:#17b34f}
-  #count{position:absolute;bottom:calc(124px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);border-radius:18px;padding:6px 22px;text-align:center;z-index:7;display:none;min-width:140px;pointer-events:none}
-  #count b{font-size:64px!important}
-  #count.on{display:block}
-  #count b{display:block;font-size:52px;line-height:1.05;font-weight:900;font-variant-numeric:tabular-nums}
-  #count small{font-size:13px;color:#ddd}
+  #hud{position:absolute;top:calc(8px + env(safe-area-inset-top));left:8px;right:8px;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.5);border-radius:16px;padding:6px 8px 10px;z-index:7}
+  #score{font-weight:800;font-size:15px;white-space:nowrap;padding:0 4px}
+  #count{flex:1;text-align:center;line-height:1;pointer-events:none}
+  #count b{display:block;font-size:34px;font-weight:900;font-variant-numeric:tabular-nums}
+  #count small{display:block;font-size:12px;color:#ddd;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #timer{min-width:44px;height:44px;border-radius:50%;border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;visibility:hidden}
+  #timer.on{visibility:visible}
+  #timer.low{border-color:#ff5050;color:#ff8080}
+  #hud .pill{padding:8px 10px;font-size:15px}
+  #progWrap{position:absolute;left:12px;right:12px;bottom:4px;height:3px;border-radius:3px;background:rgba(255,255,255,.2);overflow:hidden}
+  #progFill{height:100%;width:0;background:var(--accent);transition:width .3s}
+  #edge{position:absolute;inset:0;pointer-events:none;z-index:4;box-shadow:inset 0 0 0 0 rgba(46,230,107,0);transition:box-shadow .15s}
+  #edge.ok{box-shadow:inset 0 0 0 8px rgba(46,230,107,.85)}
+  #hint{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom));max-width:90%;background:rgba(0,0,0,.55);border-radius:12px;padding:7px 12px;font-size:14px;font-weight:600;text-align:center;display:none;z-index:7}
+  #hint.on{display:block}
+  #diag{position:absolute;bottom:2px;right:6px;font:10px monospace;color:#777;display:none}
+  #diag.on{display:block}
   #count.pulse b{animation:pulse .35s ease-out}
   @keyframes pulse{0%{transform:scale(1.45);color:#2ee66b}100%{transform:scale(1);color:#fff}}
-  #timer{position:absolute;top:calc(118px + env(safe-area-inset-top));right:14px;width:64px;height:64px;border-radius:50%;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;font-size:22px;font-weight:800;z-index:7;border:3px solid #fff}
-  #timer.on{display:flex}
-  #timer.low{border-color:#ff5050;color:#ff8080}
   #ov.result{background:rgba(0,0,0,.8)}
   #ov.result #cd{font-size:44px;color:#2ee66b}
   #ovStat{font-size:40px;font-weight:900;display:none}
   #ov.result #ovStat{display:block}
   #ov.result #ovFig{display:none}
-  #hint{position:absolute;left:0;right:0;bottom:calc(30px + env(safe-area-inset-bottom));text-align:center;font-size:16px;font-weight:600;text-shadow:0 1px 4px #000}
   #ov{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.74);gap:10px;z-index:5;text-align:center;padding:20px}
   #ov.on{display:flex}
   #ov.rest{background:rgba(10,30,60,.82)}
@@ -79,9 +77,6 @@
   #ovGoal{color:#ddd;font-size:16px}
   #cd{font-size:72px;font-weight:900;color:var(--accent);line-height:1}
   #ov.rest #cd{color:#6cc4ff}
-  #go{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:64px;font-weight:900;color:#2ee66b;text-shadow:0 4px 20px #000;pointer-events:none;z-index:6}
-  #go.on{display:flex}
-  #diag{position:absolute;bottom:4px;right:8px;font:10px monospace;color:#666}
   /* results */
   .big{font-size:64px;font-weight:800;color:var(--accent);line-height:1}
   .row{display:flex;justify-content:space-between;background:var(--card);border-radius:12px;padding:14px;font-size:16px}
@@ -126,19 +121,19 @@
 <!-- workout -->
 <section id="stage" class="screen">
   <canvas id="view"></canvas>
-  <div id="score"><small>Skor</small><span id="scoreVal">0</span></div>
-  <div id="topr">
-    <div id="stepInfo"></div>
+  <div id="edge"></div>
+  <div id="hud">
+    <div id="score">⭐ <span id="scoreVal">0</span></div>
+    <div id="count"><b id="countVal">0/5</b><small id="countLbl"></small></div>
+    <div id="timer">0</div>
+    <button class="pill" id="skipBtn" aria-label="Atla">⏭</button>
+    <button class="pill" id="close" aria-label="Bitir">✕</button>
     <div id="progWrap"><div id="progFill"></div></div>
-    <div style="display:flex;gap:6px"><button class="pill" id="skipBtn">Atla ⏭</button><button class="pill" id="close">✕ Bitir</button></div>
   </div>
-  <canvas id="mini" width="148" height="200"></canvas>
-  <div id="count"><b id="countVal">0/5</b><small id="countLbl">tekrar</small></div>
-  <div id="timer">0</div>
-  <div id="bar">Hazırlan</div>
+  <div id="stepInfo" style="display:none"></div>
+  <div id="bar" style="display:none">Hazırlan</div>
   <div id="hint"></div>
   <div id="ov"><div id="ovTitle"></div><b id="ovName"></b><canvas id="ovFig" width="390" height="520"></canvas><div id="ovStat"></div><div id="ovGoal"></div><div id="cd">3</div></div>
-  <div id="go">BAŞLA!</div>
   <div id="diag"></div>
 </section>
 
@@ -185,8 +180,8 @@ const POSES = {
   pressUp: fig({le:[-.5,-.6], re:[.5,-.6], lw:[-.42,-1.2], rw:[.42,-1.2]}),
   tree: fig(Object.assign({}, ARMS_UP_JOINED, {rk:[.62,1.45], ra:[.06,1.62]})),
   warrior: fig(Object.assign({}, ARMS_T, {lh:[-.24,1.05], rh:[.24,1.05], lk:[-.7,1.55], la:[-.85,2.35], rk:[.55,1.75], ra:[.9,2.4]})),
-  bendL: fig({h:[-.12,-.43], le:[-.45,.55], lw:[-.35,1.0], re:[.2,-.55], rw:[-.25,-1.05], lh:[.0,1], rh:[.42,1], lk:[.0,1.75], rk:[.42,1.75], la:[.0,2.5], ra:[.42,2.5]}),
-  bendR: fig({h:[.12,-.43], re:[.45,.55], rw:[.35,1.0], le:[-.2,-.55], lw:[.25,-1.05], lh:[-.42,1], rh:[.0,1], lk:[-.42,1.75], rk:[.0,1.75], la:[-.42,2.5], ra:[.0,2.5]}),
+  bendL: fig({h:[-.16,-.42], le:[-.45,.55], lw:[-.35,1.0], re:[.2,-.55], rw:[-.25,-1.05], lh:[.12,1], rh:[.56,1], lk:[.12,1.75], rk:[.56,1.75], la:[.12,2.5], ra:[.56,2.5]}),
+  bendR: fig({h:[.16,-.42], re:[.45,.55], rw:[.35,1.0], le:[-.2,-.55], lw:[.25,-1.05], lh:[-.56,1], rh:[-.12,1], lk:[-.56,1.75], rk:[-.12,1.75], la:[-.56,2.5], ra:[-.12,2.5]}),
 };
 const BONES = [['ls','rs'],['ls','le'],['le','lw'],['rs','re'],['re','rw'],['ls','lh'],['rs','rh'],['lh','rh'],['lh','lk'],['lk','la'],['rh','rk'],['rk','ra']];
 function lerpPose(a,b,t){ const o={}; for (const k in a) o[k]=[a[k][0]+(b[k][0]-a[k][0])*t, a[k][1]+(b[k][1]-a[k][1])*t]; return o; }
@@ -195,7 +190,7 @@ const osc = (t, speed=1) => (Math.sin(t*Math.PI*2*speed - Math.PI/2)+1)/2;   // 
 // ---------- geometry helpers ----------
 let W=1, H=1;
 const P = l => ({x:l.x*W, y:l.y*H});
-const VIS=0.3;
+const VIS=0.45;
 const vis = (L, ids) => ids.every(i => L[i] && (L[i].visibility ?? 1) > VIS && L[i].y < 1.25 && L[i].y > -0.35);
 const PART = {[NOSE]:'başın',[LS]:'omuzların',[RS]:'omuzların',[LE]:'dirseklerin',[RE]:'dirseklerin',[LW]:'ellerin',[RW]:'ellerin',
   [LH]:'kalçan',[RH]:'kalçan',[LK]:'dizlerin',[RK]:'dizlerin',[LA]:'ayak bileklerin',[RA]:'ayak bileklerin'};
@@ -227,144 +222,154 @@ function squatMetrics(L){
   const avg=a=>a.reduce((x,y)=>x+y)/a.length;
   return {k:avg(ka), r:avg(tr)};
 }
-function armsT(L){
+// a condition only counts after it has been true for n frames in a row (filters jitter and half movements)
+function steady(o, key, cond, n=3){ o._s=o._s||{}; o._s[key]=cond?(o._s[key]||0)+1:0; return o._s[key]>=n; }
+function arms(L){
   const {ls,rs,sw}=body(L); const le=P(L[LE]), re=P(L[RE]), lw=P(L[LW]), rw=P(L[RW]);
-  if (dist(lw,rw) < sw*1.9) return {ok:false, hint:'Kollarını yana aç ↔️'};
-  if (Math.abs(lw.y-ls.y) > sw*0.6 || Math.abs(rw.y-rs.y) > sw*0.6) return {ok:false, hint:(lw.y<ls.y||rw.y<rs.y)?'Kolları biraz indir':'Kolları omuz hizasına kaldır'};
+  const sy=(ls.y+rs.y)/2;
+  return {ls,rs,le,re,lw,rw,sw,sy,
+    eaL:angle(ls,le,lw), eaR:angle(rs,re,rw),
+    hL:(sy-lw.y)/sw, hR:(sy-rw.y)/sw,           // wrist height above shoulders, in shoulder widths
+    span:dist(lw,rw)/sw};
+}
+function armsT(L){
+  const a=arms(L);
+  if (a.span < 3.0) return {ok:false, hint:'Kollarını iki yana tamamen aç ↔️'};
+  if (Math.abs(a.hL) > 0.4 || Math.abs(a.hR) > 0.4) return {ok:false, hint:(a.hL>0||a.hR>0)?'Kolları biraz indir – omuz hizası':'Kolları omuz hizasına kaldır'};
+  if (a.eaL < 150 || a.eaR < 150) return {ok:false, hint:'Dirseklerini düz tut'};
   return {ok:true};
 }
 function armsUpJoined(L){
-  const n=P(L[NOSE]); const {ls,rs,sw}=body(L); const le=P(L[LE]), re=P(L[RE]), lw=P(L[LW]), rw=P(L[RW]);
-  if (lw.y > n.y || rw.y > n.y) return {ok:false, hint:'Kollarını başının üstüne kaldır ⬆️'};
-  if (dist(lw,rw) > sw*0.7) return {ok:false, hint:'Avuçlarını birleştir 🙏'};
-  if (angle(ls,le,lw) < 110 || angle(rs,re,rw) < 110) return {ok:false, hint:'Kollarını daha çok uzat'};
+  const a=arms(L);
+  if (a.hL < 1.3 || a.hR < 1.3) return {ok:false, hint:'Kollarını başının üstüne uzat ⬆️'};
+  if (dist(a.lw,a.rw) > a.sw*0.6) return {ok:false, hint:'Avuçlarını birleştir 🙏'};
+  if (a.eaL < 130 || a.eaR < 130) return {ok:false, hint:'Kollarını daha çok uzat'};
   return {ok:true};
 }
 
 // ---------- move library ----------
 // type 'hold' → goal in seconds; type 'reps' → goal in repetitions. secPerRep is used for time estimates.
+const ARMS=[LS,RS,LE,RE,LW,RW];
 const MOVES = {
-  mountain: { name:'Mountain Pose', type:'hold', cue:'Kollar yukarıda, avuçlar birleşik',
-    need:[LS,RS,LW,RW], ghost:()=>POSES.mountain,
+  mountain: { name:'Mountain Pose', type:'hold', cue:'Kollar başın üstünde düz, avuçlar birleşik',
+    need:ARMS, ghost:()=>POSES.mountain,
+    check(L){ const r=armsUpJoined(L); return r.ok?{ok:true}:r; }},
+  tpose: { name:'T-Pose', type:'hold', cue:'Kollar iki yana tamamen açık, omuz hizasında, dirsekler düz',
+    need:ARMS, ghost:()=>POSES.tpose,
+    check(L){ const r=armsT(L); return r.ok?{ok:true}:r; }},
+  squat: { name:'Squat', type:'reps', secPerRep:2.5, cue:'Kalçayı dizlere kadar indir, sonra tamamen kalk',
+    need:[LS,RS,LH,RH,LK,RK], ghost:t=>lerpPose(POSES.squatUp,POSES.squatDown,osc(t,.5)),
+    init(){ this.state='up'; this.base=null; this._s={}; },
     check(L){
-      const {ls,rs,sw}=body(L); const lw=P(L[LW]), rw=P(L[RW]); const top=Math.min(ls.y,rs.y)-sw*0.6;
-      if (lw.y>top || rw.y>top) return {ok:false, hint:'Kollarını başının üstüne kaldır ⬆️'};
-      if (dist(lw,rw) > sw*0.9) return {ok:false, hint:'Avuçlarını birleştir 🙏'};
-      return {ok:true, hint:'Harika, tut! 🔥'};
-    }},
-  tpose: { name:'T-Pose', type:'hold', cue:'Kollar yana açık, omuz hizasında',
-    need:[LS,RS,LW,RW], ghost:()=>POSES.tpose,
-    check(L){ const r=armsT(L); return r.ok?{ok:true,hint:'Mükemmel, tut! 🔥'}:r; }},
-  squat: { name:'Squat', type:'reps', secPerRep:2.5, cue:'Kalçayı dizlere kadar indir, sonra kalk',
-    need:[LH,RH,LK,RK], ghost:t=>lerpPose(POSES.squatUp,POSES.squatDown,osc(t,.5)),
-    init(){ this.state='up'; this.base=null; },
-    check(L){
-      // works from the front: the hip drops toward the knee (thigh looks shorter)
-      const b=body(L); if(!b.hc) return {ok:false,hint:'Kalçan görünmüyor'};
-      const kc=mid(P(L[LK]),P(L[RK]));
-      const thigh=(kc.y-b.hc.y)/b.torso;                  // ≈0.8 standing, ≈0.3 in a squat
-      const m=squatMetrics(L); const k=m?m.k:180;
-      if (this.base==null || thigh>this.base) this.base=thigh; // remember standing value
-      const depth=thigh/Math.max(0.3,this.base);          // 1 = standing, <0.65 = squatting
-      const isDown=depth<0.65||k<115, isUp=depth>0.85&&k>140; let rep=false;
+      const b=body(L); const kc=mid(P(L[LK]),P(L[RK]));
+      const thigh=(kc.y-b.hc.y)/b.torso;                  // ≈0.8 standing, ≈0.3 in a squat (seen from the front)
+      if (this.base==null || thigh>this.base) this.base=thigh;
+      const depth=thigh/Math.max(0.6,this.base);           // 1 = standing (floor in case they start already squatting)
+      const isDown=steady(this,'d',depth<0.55), isUp=steady(this,'u',depth>0.85);
+      let rep=false;
       if (this.state==='up'&&isDown) this.state='down'; else if (this.state==='down'&&isUp){ this.state='up'; rep=true; }
-      return {ok:this.state==='down', rep, dbg:`derinlik ${depth.toFixed(2)} diz ${k|0}°`,
-        hint:this.state==='down'?'Güzel! Şimdi kalk ⬆️':(depth<0.8?'Biraz daha aşağı ⬇️':'Çömel ⬇️')};
+      return {ok:this.state==='down', rep, dbg:`derinlik ${depth.toFixed(2)}`,
+        hint:this.state==='down'?'Şimdi tamamen kalk ⬆️':(depth<0.8?'Daha aşağı – kalça diz hizasına ⬇️':'Çömel ⬇️')};
     }},
-  squatHold: { name:'Squat Bekletme', type:'hold', cue:'Squat pozisyonunda aşağıda kal',
-    need:[LH,RH,LK,RK], ghost:()=>POSES.squatDown,
+  squatHold: { name:'Squat Bekletme', type:'hold', cue:'Kalça diz hizasında, aşağıda kal',
+    need:[LS,RS,LH,RH,LK,RK], ghost:()=>POSES.squatDown,
     init(){ this.base=null; },
     check(L){
-      const b=body(L); if(!b.hc) return {ok:false,hint:'Kalçan görünmüyor'};
-      const kc=mid(P(L[LK]),P(L[RK])); const thigh=(kc.y-b.hc.y)/b.torso;
+      const b=body(L); const kc=mid(P(L[LK]),P(L[RK])); const thigh=(kc.y-b.hc.y)/b.torso;
       if (this.base==null || thigh>this.base) this.base=thigh;
-      const depth=thigh/Math.max(0.3,this.base); const m=squatMetrics(L);
-      const ok=depth<0.72||(m&&m.k<125);
-      return {ok, dbg:`derinlik ${depth.toFixed(2)}`, hint:ok?'Diren, tut! 🔥':'Daha aşağı çömel ⬇️'};
+      const depth=thigh/Math.max(0.6,this.base);
+      return {ok:depth<0.6, dbg:`derinlik ${depth.toFixed(2)}`, hint:'Daha aşağı çömel ⬇️'};
     }},
-  jj: { name:'Jumping Jack', type:'reps', secPerRep:1.8, cue:'Kollar yukarı + bacaklar açık, sonra kapat',
-    need:[LS,RS,LW,RW], ghost:t=>lerpPose(POSES.stand,POSES.jjUp,osc(t,1)),
-    init(){ this.state='down'; },
+  jj: { name:'Jumping Jack', type:'reps', secPerRep:1.8, cue:'Zıpla: kollar başın üstüne + bacaklar açık, sonra kapat',
+    need:[...ARMS,LA,RA], ghost:t=>lerpPose(POSES.stand,POSES.jjUp,osc(t,1)),
+    init(){ this.state='down'; this._s={}; },
     check(L){
-      const {ls,rs,sw}=body(L); const lw=P(L[LW]), rw=P(L[RW]);
-      const sy=(ls.y+rs.y)/2;
-      const armsUp=lw.y<sy-sw*0.2&&rw.y<sy-sw*0.2, armsDown=lw.y>sy+sw*0.3&&rw.y>sy+sw*0.3;
-      // legs are checked only when the ankles are in the frame
-      const legsSeen=vis(L,[LA,RA]); const ad=legsSeen?Math.abs(P(L[LA]).x-P(L[RA]).x):0;
-      const legsOpen=!legsSeen||ad>sw*1.0;
+      const a=arms(L); const ad=Math.abs(P(L[LA]).x-P(L[RA]).x)/a.sw;
+      const open=steady(this,'o', a.hL>1.1&&a.hR>1.1&&ad>1.5, 2);
+      const closed=steady(this,'c', a.hL<-0.7&&a.hR<-0.7&&ad<1.1, 2);
       let rep=false;
-      if (this.state==='down'&&armsUp&&legsOpen) this.state='up';
-      else if (this.state==='up'&&armsDown){ this.state='down'; rep=true; }
-      const hint=this.state==='down'?(!armsUp?'Kolları yukarı kaldır + zıpla':(!legsOpen?'Bacaklarını da aç ↔️':'')):'Kolları indir ⬇️';
-      return {ok:this.state==='up', rep, hint, dbg:legsSeen?`bacak ${(ad/sw).toFixed(1)}`:'bacak yok'};
+      if (this.state==='down'&&open) this.state='up';
+      else if (this.state==='up'&&closed){ this.state='down'; rep=true; }
+      const hint=this.state==='down'
+        ? (a.hL<1.1||a.hR<1.1 ? 'İki kolu da başın üstüne kaldır' : 'Bacaklarını da aç ↔️')
+        : 'Kolları indir, bacakları kapat';
+      return {ok:this.state==='up', rep, hint, dbg:`kol ${a.hL.toFixed(1)}/${a.hR.toFixed(1)} bacak ${ad.toFixed(1)}`};
     }},
-  highKnees: { name:'Diz Çekme', type:'reps', secPerRep:1.2, cue:'Dizleri sırayla yukarı çek (her diz 1 sayılır)',
+  highKnees: { name:'Diz Çekme', type:'reps', secPerRep:1.2, cue:'Dizleri sırayla kalça hizasına çek (her diz 1 sayılır)',
     need:[LS,RS,LH,RH,LK,RK], ghost:t=>lerpPose(POSES.kneeL,POSES.kneeR,osc(t,.8)),
-    init(){ this.up={l:false,r:false}; this.base={l:null,r:null}; },
+    init(){ this.up={l:false,r:false}; this.base={l:null,r:null}; this._s={}; },
     check(L){
       const {torso}=body(L); let rep=false, any=false, d=[];
       for (const [side,h,k] of [['l',LH,LK],['r',RH,RK]]){
         const lift=(P(L[k]).y-P(L[h]).y)/torso;
         if (this.base[side]==null||lift>this.base[side]) this.base[side]=lift;
-        const rel=lift/Math.max(0.3,this.base[side]);       // 1 = standing, small = knee up
+        const rel=lift/Math.max(0.35,this.base[side]);       // 1 = standing, ~0.3 = knee at hip height
         d.push(rel.toFixed(2));
-        if (!this.up[side] && rel<0.6){ this.up[side]=true; rep=true; }
-        else if (this.up[side] && rel>0.8) this.up[side]=false;
+        if (!this.up[side] && steady(this,'u'+side,rel<0.45,2)){ this.up[side]=true; rep=true; }
+        else if (this.up[side] && steady(this,'d'+side,rel>0.85,2)) this.up[side]=false;
         if (this.up[side]) any=true;
       }
-      return {ok:any, rep, dbg:`diz ${d.join('/')}`, hint:any?'Diğer diz! 🔁':'Dizini yukarı çek ⬆️'};
+      return {ok:any, rep, dbg:`diz ${d.join('/')}`, hint:'Dizini kalça hizasına kadar çek ⬆️'};
     }},
-  press: { name:'Omuz Press', type:'reps', secPerRep:2.5, cue:'Eller omuz hizasında başla, kolları yukarı it',
-    need:[LS,RS,LW,RW], ghost:t=>lerpPose(POSES.pressDown,POSES.pressUp,osc(t,.5)),
-    init(){ this.state='up0'; },
+  press: { name:'Omuz Press', type:'reps', secPerRep:2.5, cue:'Dirsekler bükük, eller kulak hizasında başla; kolları tamamen yukarı it',
+    need:ARMS, ghost:t=>lerpPose(POSES.pressDown,POSES.pressUp,osc(t,.5)),
+    init(){ this.state='start'; this._s={}; },
     check(L){
-      const {ls,rs,sw}=body(L); const lw=P(L[LW]), rw=P(L[RW]); const sy=(ls.y+rs.y)/2;
-      // hand height in shoulder widths above the shoulders (wrists out of frame at the top still count)
-      const hl=(sy-lw.y)/sw, hr=(sy-rw.y)/sw, h=Math.min(hl,hr);
-      const up=h>1.15, down=h<0.8&&h>-0.6;
+      const a=arms(L);
+      const elbowsOut=Math.abs(a.le.y-a.sy)<a.sw*0.6 && Math.abs(a.re.y-a.sy)<a.sw*0.6;
+      const down=steady(this,'d', a.eaL<110&&a.eaR<110 && a.hL>0.1&&a.hR>0.1 && a.hL<1.1&&a.hR<1.1 && elbowsOut);
+      const up=steady(this,'u', a.eaL>150&&a.eaR>150 && a.hL>1.5&&a.hR>1.5);
       let rep=false;
       if (this.state!=='down'&&down) this.state='down';
       else if (this.state==='down'&&up){ this.state='up'; rep=true; }
-      return {ok:this.state==='up', rep, dbg:`el yüksekliği ${h.toFixed(2)}`,
-        hint:this.state==='down'?'Şimdi yukarı it ⬆️':'Elleri omuz hizasına indir ⬇️'};
+      let hint;
+      if (this.state==='down') hint = a.hL<1.5||a.hR<1.5 ? 'İki kolu da yukarı it ⬆️' : 'Dirseklerini tamamen düzleştir';
+      else hint = 'Dirsekleri bük, elleri kulak hizasına indir';
+      return {ok:this.state==='up', rep, hint, dbg:`dirsek ${a.eaL|0}/${a.eaR|0}° el ${a.hL.toFixed(1)}/${a.hR.toFixed(1)}`};
     }},
-  lateral: { name:'Yana Kol Açma', type:'reps', secPerRep:2.5, cue:'Kollar yanda aşağıdan omuz hizasına kalkar',
-    need:[LS,RS,LW,RW], ghost:t=>lerpPose(POSES.stand,POSES.tpose,osc(t,.5)),
-    init(){ this.state='up0'; },
+  lateral: { name:'Yana Kol Açma', type:'reps', secPerRep:2.5, cue:'Kollar yanda aşağıdan omuz hizasına kalkar, dirsekler düz',
+    need:ARMS, ghost:t=>lerpPose(POSES.stand,POSES.tpose,osc(t,.5)),
+    init(){ this.state='start'; this._s={}; },
     check(L){
-      const {ls,rs,sw}=body(L); const lw=P(L[LW]), rw=P(L[RW]); const sy=(ls.y+rs.y)/2;
-      const down=lw.y>sy+sw*0.9&&rw.y>sy+sw*0.9;
-      const up=lw.y<sy+sw*0.45&&rw.y<sy+sw*0.45&&dist(lw,rw)>sw*1.8;
+      const a=arms(L);
+      const down=steady(this,'d', a.hL<-1.1&&a.hR<-1.1);
+      const upOk=armsT(L);
+      const up=steady(this,'u', upOk.ok);
       let rep=false;
       if (this.state!=='down'&&down) this.state='down';
       else if (this.state==='down'&&up){ this.state='up'; rep=true; }
-      return {ok:this.state==='up', rep, hint:this.state==='down'?'Kolları yana, omuz hizasına kaldır ↔️':'Kolları aşağı indir ⬇️'};
+      return {ok:this.state==='up', rep, dbg:`el ${a.hL.toFixed(1)}/${a.hR.toFixed(1)} açıklık ${a.span.toFixed(1)}`,
+        hint:this.state==='down'?(upOk.hint||'Kolları omuz hizasına kaldır'):'Kolları tamamen aşağı indir ⬇️'};
     }},
   tree: { name:'Ağaç Pozu', type:'hold', cue:'Tek ayak üstünde, eller başın üstünde birleşik',
-    need:[LS,RS,LW,RW,LH,RH,LK,RK], ghost:()=>POSES.tree,
+    need:[...ARMS,LH,RH,LK,RK], ghost:()=>POSES.tree,
     check(L){
       const {torso}=body(L);
-      const kneeUp=Math.abs(P(L[LK]).y-P(L[RK]).y)>torso*0.15 || (vis(L,[LA,RA])&&Math.abs(P(L[LA]).y-P(L[RA]).y)>torso*0.25);
+      const kneeUp=Math.abs(P(L[LK]).y-P(L[RK]).y)>torso*0.2;
       if (!kneeUp) return {ok:false, hint:'Bir ayağını kaldırıp diğer bacağına daya 🦩'};
-      const r=MOVES.mountain.check(L); return r.ok?{ok:true,hint:'Dengede kal 🌳'}:r;
+      const r=armsUpJoined(L); return r.ok?{ok:true}:r;
     }},
   warrior: { name:'Savaşçı II', type:'hold', cue:'Bacaklar geniş, ön diz bükük, kollar yana açık',
-    need:[LS,RS,LW,RW,LH,RH,LK,RK], ghost:()=>POSES.warrior,
+    need:[...ARMS,LH,RH,LK,RK,LA,RA], ghost:()=>POSES.warrior,
     check(L){
       const {sw}=body(L);
-      const kd=Math.abs(P(L[LK]).x-P(L[RK]).x);
-      if (kd < sw*1.3) return {ok:false, hint:'Bacaklarını iyice aç ↔️'};
-      const r=armsT(L); return r.ok?{ok:true,hint:'Güçlü dur, tut! 💪'}:r;
+      const ad=Math.abs(P(L[LA]).x-P(L[RA]).x)/sw;
+      if (ad < 2.2) return {ok:false, hint:'Bacaklarını iyice aç ↔️'};
+      const k=Math.min(angle(P(L[LH]),P(L[LK]),P(L[LA])), angle(P(L[RH]),P(L[RK]),P(L[RA])));
+      if (k>160) return {ok:false, hint:'Ön dizini bük'};
+      const r=armsT(L); return r.ok?{ok:true}:r;
     }},
-  sideBend: { name:'Yana Esneme', type:'reps', secPerRep:2.5, cue:'Gövdeyi sırayla sağa-sola eğ (her taraf 1 sayılır)',
-    need:[LS,RS,LH,RH], ghost:t=>lerpPose(POSES.bendL,POSES.bendR,osc(t,.4)),
-    init(){ this.side='mid'; },
+  sideBend: { name:'Yana Esneme', type:'reps', secPerRep:2.5, cue:'Bir kol başın üstünde, gövdeyi sırayla sağa-sola eğ (her taraf 1 sayılır)',
+    need:[...ARMS,LH,RH], ghost:t=>lerpPose(POSES.bendL,POSES.bendR,osc(t,.4)),
+    init(){ this.side='mid'; this._s={}; },
     check(L){
-      const b=body(L); if(!b.hc) return {ok:false,hint:'Kalçan görünmüyor'};
-      const tilt=(b.sc.x-b.hc.x)/b.torso; let rep=false;
-      if (this.side==='mid'&&Math.abs(tilt)>0.15){ this.side=tilt<0?'l':'r'; rep=true; }
-      else if (this.side!=='mid'&&Math.abs(tilt)<0.07) this.side='mid';
-      return {ok:this.side!=='mid', rep, dbg:`eğim ${tilt.toFixed(2)}`, hint:this.side==='mid'?'Gövdeni yana eğ ↙️↘️':'Ortaya dön, sonra diğer tarafa'};
+      const b=body(L); const a=arms(L);
+      const tilt=(b.sc.x-b.hc.x)/b.torso; const armUp=Math.max(a.hL,a.hR)>1.0;
+      let rep=false;
+      if (this.side==='mid'&&steady(this,'b',Math.abs(tilt)>0.18&&armUp)){ this.side=tilt<0?'l':'r'; rep=true; }
+      else if (this.side!=='mid'&&steady(this,'m',Math.abs(tilt)<0.08)) this.side='mid';
+      return {ok:this.side!=='mid', rep, dbg:`eğim ${tilt.toFixed(2)}`,
+        hint:this.side==='mid'?(armUp?'Gövdeni yana eğ ↙️↘️':'Bir kolunu başının üstüne kaldır'):'Ortaya dön, sonra diğer tarafa'};
     }},
 };
 
@@ -537,7 +542,9 @@ function moveNumber(i){ return plan.slice(0,i+1).filter(s=>s.kind==='move').leng
 function nextMoveIndex(i){ for (let j=i+1;j<plan.length;j++) if (plan[j].kind==='move') return j; return -1; }
 function startStep(i){
   si=i; const st=plan[i]; phaseStart=clock(); lastT=null; lastRes=null;
-  $('ov').className=''; $('count').classList.remove('on'); $('timer').classList.remove('on');
+  $('edge').classList.remove('ok'); $('hint').classList.remove('on'); lastHint='';
+  if (st.kind==='move'){ $('countVal').textContent=`0/${st.goal}`; $('countLbl').textContent=MOVES[st.id].name; } else { $('countVal').textContent='😮‍💨'; $('countLbl').textContent='Dinlenme'; }
+  $('ov').className=''; $('timer').classList.remove('on');
   $('progFill').style.width = (100*i/plan.length)+'%';
   if (st.kind==='rest'){
     phase='rest';
@@ -567,9 +574,9 @@ function updateBar(ok){
   if (phase!=='active') return;
   const v = m.type==='hold' ? Math.floor(stepState.held) : stepState.reps;
   $('countVal').textContent = `${v}/${st.goal}`;
-  $('countLbl').textContent = m.type==='hold' ? 'saniye tutuldu' : 'tekrar';
+  $('countLbl').textContent = m.name + (m.type==='hold' ? ' · sn' : '');
   bar.textContent = m.name;
-  bar.classList.toggle('ok', !!ok);
+  $('edge').classList.toggle('ok', !!ok);
 }
 function pulseCount(){ const c=$('count'); c.classList.remove('pulse'); void c.offsetWidth; c.classList.add('pulse'); }
 // end of a move: show its score for a moment, then continue
@@ -580,7 +587,7 @@ function showResult(done){
   log.push({id:st.id, goal:st.goal, got, done, pts:Math.round(stepState.pts)});
   $('scoreVal').textContent=Math.round(score);
   phase='result'; phaseStart=clock();
-  $('count').classList.remove('on'); $('timer').classList.remove('on');
+  $('timer').classList.remove('on');
   $('ov').className='on result';
   $('ovTitle').textContent = done ? 'Tamamlandı! 🎉' : 'Süre doldu ⏱';
   $('ovName').textContent = m.name;
@@ -588,7 +595,7 @@ function showResult(done){
   $('ovGoal').textContent = done ? 'Harika iş!' : 'Sıradaki harekete geçiliyor';
   $('cd').textContent = `+${Math.round(stepState.pts)} puan`;
   $('bar').textContent = done ? '✓ Tamamlandı' : 'Süre doldu'; $('bar').classList.toggle('ok', done);
-  $('hint').textContent=''; lastHint='';
+  $('hint').textContent=''; $('hint').classList.remove('on'); $('edge').classList.remove('ok'); lastHint='';
   try{navigator.vibrate&&navigator.vibrate(done?[80,60,80]:150);}catch(e){}
 }
 const RESULT_SECS=2.5;
@@ -597,7 +604,7 @@ function finishStep(){
 }
 function endSession(){
   if (!running) return;
-  running=false; $('ov').className=''; $('count').classList.remove('on'); $('timer').classList.remove('on');
+  running=false; $('ov').className=''; $('timer').classList.remove('on');
   // log the step that was in progress when "Bitir" was pressed
   const st=plan[si];
   if (st && st.kind==='move' && log.length < moveNumber(si)){
@@ -647,7 +654,8 @@ function onResults(res){
     else if (!vis(L, m.need)) hint=missingHint(L, m.need);
     else {
       const r=m.check.call(m, L); ok=r.ok; hint=r.hint||''; dbg=r.dbg||'';
-      if (m.type==='hold' && ok){ stepState.held+=dt; score+=dt*10; stepState.pts+=dt*10; }
+      stepState.okRun = ok ? (stepState.okRun||0)+1 : 0;
+      if (m.type==='hold'){ ok = stepState.okRun>=5; if (ok){ stepState.held+=dt; score+=dt*10; stepState.pts+=dt*10; } }
       if (m.type==='reps' && r.rep){ stepState.reps++; score+=10; stepState.pts+=10; pulseCount(); try{navigator.vibrate&&navigator.vibrate(40);}catch(e){} }
     }
     $('scoreVal').textContent=Math.round(score);
@@ -657,7 +665,8 @@ function onResults(res){
     if (t-phaseStart > stepTime(st)){ showResult(false); return; }
     lastRes={L, ok};
   }
-  if (hint!==lastHint){ $('hint').textContent=hint; lastHint=hint; }
+  if (phase!=='active' || ok) hint='';
+  if (hint!==lastHint){ $('hint').textContent=hint; $('hint').classList.toggle('on', !!hint); lastHint=hint; }
 }
 
 // ---------- rendering (every animation frame) ----------
@@ -665,6 +674,7 @@ function render(){
   if (!running) return;
   requestAnimationFrame(render);
   const vw=src.videoWidth, vh=src.videoHeight;
+  if (location.hash==='#debug') $('diag').classList.add('on');
   $('diag').textContent=`${dbg} · ${vw}x${vh} p${poseFrames}${lastErr?' ⚠'+lastErr:''}`;
   const t=clock(), now=performance.now()/1000, st=plan[si];
   // overlay timers
@@ -687,8 +697,8 @@ function render(){
     const el=introArmed ? t-phaseStart : 0, left=Math.ceil(INTRO-el);
     $('cd').textContent=Math.max(1,left);
     if (el>=INTRO){
-      phase='active'; phaseStart=t; lastT=null; $('ov').className=''; $('count').classList.add('on'); $('timer').classList.add('on'); $('timer').textContent=stepTime(st); updateBar(false);
-      const g=$('go'); g.classList.add('on'); setTimeout(()=>g.classList.remove('on'),700);
+      phase='active'; phaseStart=t; lastT=null; $('ov').className=''; $('timer').classList.add('on'); $('timer').textContent=stepTime(st); updateBar(false);
+      const e=$('edge'); e.classList.add('ok'); setTimeout(()=>e.classList.remove('ok'),400);
       try{navigator.vibrate&&navigator.vibrate(60);}catch(e){}
     }
   }
@@ -715,7 +725,6 @@ function render(){
     for (const k in map){ const A=L[map[k]]; if((A.visibility??1)>.5){ vctx.beginPath(); vctx.arc(A.x*W,A.y*H,Math.max(3,T*0.035),0,Math.PI*2); vctx.fill(); } }
     vctx.restore();
   }
-  drawMini($('mini'), st.id, now);
 }
 
 // ---------- buttons ----------
